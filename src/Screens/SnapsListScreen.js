@@ -20,9 +20,16 @@ export default class SnapsListScreen extends Component {
       snapsLoaded: false,
       errorMessage:""
     };
+    
+    this.loadUserSnaps = this.loadUserSnaps.bind(this);
   }
+  
   componentDidMount() {
-
+      this.fetchSnapsData();
+  }
+  
+  fetchSnapsData()
+  {
     fetch(appConfig.app.API_BASE_URL+'admin/snaps/?user_id='+this.state.current_user_id, {
       method: 'GET',
       headers: {
@@ -43,7 +50,13 @@ export default class SnapsListScreen extends Component {
         this.displayErrorMessage("Failed to load yous snaps from server. Please try again");
         console.log(err);
       });
-      ;
+
+  }
+
+  loadUserSnaps(user_id)
+  {
+      this.setState({current_user_id: user_id});
+      this.fetchSnapsData();
   }
 
   sortSnaps(snapsDataArray){
@@ -80,7 +93,7 @@ export default class SnapsListScreen extends Component {
             <span>Loading your snaps please wait</span>
           :
             this.state.SnapsData.length?
-            <SnapsListComponent snapsLoaded={this.state.snapsLoaded} snaps={ this.state.SnapsData } />
+            <SnapsListComponent parent={this} snapsLoaded={this.state.snapsLoaded} snaps={ this.state.SnapsData } />
             :
             <span>You have not uploaded any snaps</span>
         }

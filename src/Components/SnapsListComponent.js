@@ -1,5 +1,7 @@
 import React, { Component, Link } from 'react';
 import appConfig from '../Config/params';
+import { Button } from 'react-bootstrap';
+import history from '../history';
 
 
 export default class SnapsListComponent extends Component {
@@ -20,6 +22,11 @@ export default class SnapsListComponent extends Component {
     this.setState({ snapsLoaded: nextProps.snapsLoaded });
   }
 
+  goToUserSnaps(e, snap_user_id)
+  {
+      this.props.parent.loadUserSnaps(snap_user_id);
+//      history.replace('snaps');
+  }
   goTo(route) {
     // alert(route);
     this.props.history.replace(`/${route}`)
@@ -33,6 +40,7 @@ export default class SnapsListComponent extends Component {
                 <thead>
                   <tr>
                     <th>Snap Id</th>
+                    <th>User Id</th>
                     <th>Show Image</th>
                     <th>Venue Id</th>
                     <th>Venue Title</th>
@@ -44,6 +52,15 @@ export default class SnapsListComponent extends Component {
                     this.state.snaps.map((snap) => (
                     <tr key={snap.id} >
                         <td>{snap.id}</td>
+                        <td>
+                            <Button
+                              bsStyle="primary"
+                              className="btn-margin"
+                              onClick={e => this.goToUserSnaps(e, snap.user_id)}
+                            >
+                              {snap.user_id}
+                            </Button>
+                        </td>
                         <td>
                             <a 
                                 target="_blank" 
